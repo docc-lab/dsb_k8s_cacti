@@ -8,6 +8,7 @@ ln -s /local/logs/setup.log /local/setup/setup-driver.log
 ALLNODESCRIPTS="setup-ssh.sh setup-disk-space.sh"
 HEADNODESCRIPTS="setup-nfs-server.sh setup-nginx.sh setup-ssl.sh setup-kubespray.sh setup-kubernetes-extra.sh setup-dsb.sh setup-end.sh"
 WORKERNODESCRIPTS="setup-nfs-client.sh"
+CACTISCRIPTS="setup-cacti.sh"
 
 export SRC=`dirname $0`
 cd $SRC
@@ -36,6 +37,15 @@ if [ "$HOSTNAME" = "node-0" ]; then
 	    echo "ERROR: ${script} failed; aborting driver!"
 	    exit 1
 	fi
+    done
+
+    for script in $CACTISCRIPTS ; do
+  cd $SRC
+  $SRC/$script | tee - /local/logs/${script}.log 2>&1
+  if [ ! $PIPESTATUS -eq 0 ]; then
+      echo "ERROR: ${script} failed; aborting driver!"
+      exit 1
+  fi
     done
 else
     for script in $WORKERNODESCRIPTS ; do

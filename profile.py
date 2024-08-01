@@ -368,10 +368,10 @@ for i in range(0,params.nodeCount):
         iface = node.addInterface("if%d" % (j,))
         datalan.addInterface(iface)
         j += 1
-    node.addService(pg.Execute(shell="bash", command="/local/repository/changeShells.sh"))
+    node.addService(RSpec.Execute(shell="bash", command="/local/repository/changeShells.sh"))
     if TBCMD is not None:
         node.addService(RSpec.Execute(shell="sh",command=TBCMD))
-    node.addService(pg.Execute(shell="bash", command="/local/repository/setup-cacti.sh"))
+    node.addService(RSpec.Execute(shell="bash", command="/local/repository/setup-cacti.sh"))
     if disableTestbedRootKeys:
         node.installRootKeys(False, False)
     nodes[nodename] = node

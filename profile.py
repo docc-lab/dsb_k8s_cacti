@@ -371,7 +371,9 @@ for i in range(0,params.nodeCount):
     node.addService(RSpec.Execute(shell="bash", command="/local/repository/changeShells.sh"))
     if TBCMD is not None:
         node.addService(RSpec.Execute(shell="sh",command=TBCMD))
-    node.addService(RSpec.Execute(shell="bash", command="/local/repository/setup-cacti.sh"))
+    # node.addService(RSpec.Execute(shell="bash", command="/local/repository/setup-cacti.sh"))
+    if i == 0:
+        node.addService(RSpec.Execute(shell="bash", command="/local/repository/setup-cacti.sh"))
     if disableTestbedRootKeys:
         node.installRootKeys(False, False)
     nodes[nodename] = node

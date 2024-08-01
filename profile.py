@@ -368,12 +368,12 @@ for i in range(0,params.nodeCount):
         iface = node.addInterface("if%d" % (j,))
         datalan.addInterface(iface)
         j += 1
-    node.addService(RSpec.Execute(shell="bash", command="/local/repository/changeShells.sh"))
+    # node.addService(RSpec.Execute(shell="bash", command="/local/repository/changeShells.sh"))
     if TBCMD is not None:
-        node.addService(RSpec.Execute(shell="sh",command=TBCMD))
+        node.addService(RSpec.Execute(shell="sh", command=TBCMD))
     # node.addService(RSpec.Execute(shell="bash", command="/local/repository/setup-cacti.sh"))
-    if i == 0:
-        node.addService(RSpec.Execute(shell="bash", command="/local/repository/setup-cacti.sh"))
+    # if i == 0:
+    #     node.addService(RSpec.Execute(shell="bash", command="/local/repository/setup-cacti.sh"))
     if disableTestbedRootKeys:
         node.installRootKeys(False, False)
     nodes[nodename] = node
@@ -402,6 +402,7 @@ for i in range(0,params.nodeCount):
                 sharedvlan.best_effort = True
             sharedvlans.append(sharedvlan)
             k += 1
+    # node.addService(RSpec.Execute(shell="bash", command="/local/repository/changeShells.sh"))
 
 #
 # Add the dataset(s), if requested.

@@ -7,6 +7,6 @@ chmod -R o+rwX /etc/pythia
 
 chmod -R 777 /local/pythia/workloads
 
-touch /root/setup/setup-pythia-done
+touch /local/setup/setup-pythia-done
 
 chown geniuser -R /local

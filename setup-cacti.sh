@@ -10,11 +10,13 @@
 #    exit 1
 #fi
 #
-## Don't run setup-pythia.sh twice
-#if [ -f /root/setup/setup-pythia-done ]; then
-#    echo "setup-pythia already ran; not running again"
-#    exit 0
-#fi
+
+# Don't run setup-pythia.sh twice
+if [ -f /local/setup/setup-pythia-done ]; then
+    echo "setup-pythia already ran; not running again"
+    exit 0
+fi
+
 #
 #cd /local
 #
@@ -67,6 +69,9 @@ if [ $EUID -ne 0 ] ; then
     echo "This script must be run as root" 1>&2
     exit 1
 fi
+
+sudo apt-get install libssl-dev
+sudo apt install pkg-config
 
 su geniuser -c "bash /local/repository/setup-cacti/install-cacti.sh"
 bash /local/repository/setup-cacti/setup-cacti-service.sh

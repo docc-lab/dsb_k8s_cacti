@@ -6,7 +6,7 @@ set -x
 ln -s /local/logs/setup.log /local/setup/setup-driver.log
 
 ALLNODESCRIPTS="setup-ssh.sh setup-disk-space.sh"
-HEADNODESCRIPTS="setup-nfs-server.sh setup-nginx.sh setup-ssl.sh setup-kubespray.sh setup-kubernetes-extra.sh setup-dsb.sh setup-end.sh setup-cacti.sh"
+HEADNODESCRIPTS="setup-nfs-server.sh setup-nginx.sh setup-ssl.sh setup-kubespray.sh setup-kubernetes-extra.sh setup-dsb.sh setup-end.sh"
 WORKERNODESCRIPTS="setup-nfs-client.sh"
 #HEADNODESUDOS="setup-cacti.sh"
 
@@ -39,6 +39,8 @@ if [ "$HOSTNAME" = "node-0" ]; then
 	    exit 1
 	  fi
   done
+
+  sudo su root -c "bash /local/repository/setup-cacti.sh"
 else
     for script in $WORKERNODESCRIPTS ; do
 	cd $SRC

@@ -19,12 +19,13 @@ if [ -f $OURDIR/setup-pythia-done ]; then
     exit 0
 fi
 
-sudo apt-get pkg-config -y
+sudo apt-get install pkg-config -y
 
 # shellcheck disable=SC2045
 for user in $(ls /users)
 do
   su $user -c "bash /local/repository/setup-rust.sh"
+  sudo chsh $user --shell /bin/bash
 done
 
 # shellcheck disable=SC2164
@@ -35,15 +36,18 @@ chown geniuser -R /local/pythia
 
 mkdir dotfiles
 
-echo "phase 0" >> cargo_phases.txt
-su geniuser -c "cargo update --manifest-path /local/pythia/Cargo.toml -p lexical-core" > /local/lc0_out.txt 2> /local/lc0_err.txt
-echo "phase 1" >> cargo_phases.txt
-su geniuser -c "cargo update --manifest-path /local/pythia/pythia_server/Cargo.toml -p lexical-core" > /local/lc1_out.txt 2> /local/lc1_err.txt
-echo "phase 2" >> cargo_phases.txt
-su geniuser -c "cargo install --locked --path /local/pythia" > /local/pythia_out.txt 2> /local/pythia_err.txt
-echo "phase 3" >> cargo_phases.txt
-su geniuser -c "cargo install --locked --path /local/pythia/pythia_server" > /local/pythia_server_out.txt 2> /local/pythia_server_err.txt
-echo "phase 4" >> cargo_phases.txt
+#echo "phase 0" >> cargo_phases.txt
+#su geniuser -c "cargo update --manifest-path /local/pythia/Cargo.toml -p lexical-core" > /local/lc0_out.txt 2> /local/lc0_err.txt
+#echo "phase 1" >> cargo_phases.txt
+#su geniuser -c "cargo update --manifest-path /local/pythia/pythia_server/Cargo.toml -p lexical-core" > /local/lc1_out.txt 2> /local/lc1_err.txt
+#echo "phase 2" >> cargo_phases.txt
+#su geniuser -c "cargo install --locked --path /local/pythia" > /local/pythia_out.txt 2> /local/pythia_err.txt
+#echo "phase 3" >> cargo_phases.txt
+#su geniuser -c "cargo install --locked --path /local/pythia/pythia_server" > /local/pythia_server_out.txt 2> /local/pythia_server_err.txt
+#echo "phase 4" >> cargo_phases.txt
+
+su geniuser -c "bash install-cacti.sh"
+
 sudo ln -s /users/geniuser/.cargo/bin/pythia_server /usr/local/bin/
 sudo ln -s /users/geniuser/.cargo/bin/pythia /usr/bin/pythia
 sudo ln -s /local/pythia /users/geniuser/

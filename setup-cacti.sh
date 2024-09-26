@@ -19,14 +19,43 @@ if [ -f $OURDIR/setup-pythia-done ]; then
     exit 0
 fi
 
+logtstart "pythia"
+
 sudo apt-get install pkg-config -y
 
 # shellcheck disable=SC2045
 for user in $(ls /users)
 do
-  su $user -c "bash /local/repository/setup-rust.sh"
   sudo chsh $user --shell /bin/bash
 done
+
+pids=()
+# shellcheck disable=SC2045
+for user in $(ls /users)
+do
+  su $user -c "bash /local/repository/setup-rust.sh" &
+  pids+=($!)
+done
+
+# shellcheck disable=SC2068
+for pid in ${pids[@]}
+do
+    wait $pid
+done
+
+#pids=()
+## shellcheck disable=SC2045
+#for user in $(ls /users)
+#do
+#  su $user -c "bash /local/repository/install-cacti.sh" &
+#  pids+=($!)
+#done
+#
+## shellcheck disable=SC2068
+#for pid in ${pids[@]}
+#do
+#    wait $pid
+#done
 
 # shellcheck disable=SC2164
 cd /local
@@ -35,6 +64,8 @@ chmod -R 777 /local/pythia
 chown geniuser -R /local/pythia
 
 mkdir dotfiles
+
+su geniuser -c "bash /local/repository/install-cacti.sh"
 
 #echo "phase 0" >> cargo_phases.txt
 #su geniuser -c "cargo update --manifest-path /local/pythia/Cargo.toml -p lexical-core" > /local/lc0_out.txt 2> /local/lc0_err.txt
@@ -46,7 +77,7 @@ mkdir dotfiles
 #su geniuser -c "cargo install --locked --path /local/pythia/pythia_server" > /local/pythia_server_out.txt 2> /local/pythia_server_err.txt
 #echo "phase 4" >> cargo_phases.txt
 
-su geniuser -c "bash install-cacti.sh"
+#su geniuser -c "bash install-cacti.sh"
 
 sudo ln -s /users/geniuser/.cargo/bin/pythia_server /usr/local/bin/
 sudo ln -s /users/geniuser/.cargo/bin/pythia /usr/bin/pythia
@@ -63,6 +94,7 @@ chmod -R 777 /local/pythia/workloads
 sudo systemctl start pythia.service
 
 touch $OURDIR/setup-pythia-done
+
 logtend "pythia"
 
 chown geniuser -R /local

@@ -374,7 +374,7 @@ for i in range(0,params.nodeCount):
         node.installRootKeys(False, False)
     nodes[nodename] = node
     if i == 0:
-        node.addService(RSpec.Execute(shell="bash",command="/local/repository/setup-cacti.sh"))
+        # node.addService(RSpec.Execute(shell="bash",command="/local/repository/setup-cacti.sh"))
         k = 0
         for x in params.sharedVlans:
             iface = node.addInterface("ifSharedVlan%d" % (k,))

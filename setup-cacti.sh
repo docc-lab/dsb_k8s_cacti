@@ -21,6 +21,7 @@ fi
 
 logtstart "pythia"
 
+sudo apt-get install libssl-dev -y
 sudo apt-get install pkg-config -y
 
 # shellcheck disable=SC2045

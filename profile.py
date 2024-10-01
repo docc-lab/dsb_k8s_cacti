@@ -373,12 +373,12 @@ for i in range(0,params.nodeCount):
         iface = node.addInterface("if%d" % (j,))
         datalan.addInterface(iface)
         j += 1
-    if TBCMD is not None:
-        node.addService(RSpec.Execute(shell="sh",command=TBCMD))
     if params.application == 0:
         node.addService(RSpec.Execute(shell="sh",command="sudo echo \"K8S\" > /local/setup/app-type"))
     else:
         node.addService(RSpec.Execute(shell="sh",command="sudo echo \"DOCKER\" > /local/setup/app-type"))
+    if TBCMD is not None:
+        node.addService(RSpec.Execute(shell="sh",command=TBCMD))
     if disableTestbedRootKeys:
         node.installRootKeys(False, False)
     nodes[nodename] = node

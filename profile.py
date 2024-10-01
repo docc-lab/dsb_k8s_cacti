@@ -49,6 +49,11 @@ pc.defineParameter(
     [(0,"Any"),(1000000,"1Gb/s"),(10000000,"10Gb/s"),(25000000,"25Gb/s"),(40000000,"40Gb/s"),(100000000,"100Gb/s")],
     longDescription="A specific link speed to use for each link/LAN.  All experiment network interfaces will request this speed.")
 pc.defineParameter(
+    "application","Application Used for Experiment",
+    portal.ParameterType.INTEGER,0,
+    [(0,"Hotel Reservation (K8S)"),(1,"Social Network (Docker)")],
+    longDescription="The application to be used by this experiment. Depending on the application, either K8S or Docker will be used.")
+pc.defineParameter(
     "diskImage","Disk Image",
     portal.ParameterType.STRING,
     "urn:publicid:IDN+emulab.net+image+emulab-ops//UBUNTU22-64-STD",
@@ -370,6 +375,10 @@ for i in range(0,params.nodeCount):
         j += 1
     if TBCMD is not None:
         node.addService(RSpec.Execute(shell="sh",command=TBCMD))
+    if params.application == 0:
+        node.addService(RSpec.Execute(shell="sh",command="sudo echo \"K8S\" > /local/setup/app-type"))
+    else:
+        node.addService(RSpec.Execute(shell="sh",command="sudo echo \"DOCKER\" > /local/setup/app-type"))
     if disableTestbedRootKeys:
         node.installRootKeys(False, False)
     nodes[nodename] = node

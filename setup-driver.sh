@@ -6,7 +6,8 @@ set -x
 ln -s /local/logs/setup.log /local/setup/setup-driver.log
 
 ALLNODESCRIPTS="setup-ssh.sh setup-disk-space.sh"
-HEADNODESCRIPTS="setup-nfs-server.sh setup-nginx.sh setup-ssl.sh setup-kubespray.sh setup-kubernetes-extra.sh setup-dsb.sh setup-end.sh"
+HEADNODESCRIPTS_K8S="setup-nfs-server.sh setup-nginx.sh setup-ssl.sh setup-kubespray.sh setup-kubernetes-extra.sh setup-dsb-k8s.sh setup-end.sh"
+HEADNODESCRIPTS_DOCKER="setup-nfs-server.sh setup-nginx.sh setup-ssl.sh setup-docker.sh setup-dsb-docker.sh setup-end.sh"
 WORKERNODESCRIPTS="setup-nfs-client.sh"
 #HEADNODESUDOS="setup-cacti.sh"
 
@@ -14,7 +15,7 @@ export SRC=`dirname $0`
 cd $SRC
 . $SRC/setup-lib.sh
 
-chmod +x $SRC/setup-dsb.sh
+chmod +x $SRC/setup-dsb-k8s.sh
 
 # Don't run setup-driver.sh twice
 if [ -f $OURDIR/setup-driver-done ]; then
@@ -30,7 +31,7 @@ for script in $ALLNODESCRIPTS ; do
     fi
 done
 if [ "$HOSTNAME" = "node-0" ]; then
-  for script in $HEADNODESCRIPTS
+  for script in $HEADNODESCRIPTS_$(cat /local/setup/app-type)
   do
 	  cd $SRC
 	  $SRC/$script | tee - /local/logs/${script}.log 2>&1

@@ -13,7 +13,8 @@ import hashlib
 import os.path
 import sys
 
-TBCMD = "sudo mkdir -p /local/setup && sudo chown `geni-get user_urn | cut -f4 -d+` /local/setup && sudo -u `geni-get user_urn | cut -f4 -d+` -Hi /bin/bash -c '/local/repository/setup-driver.sh >/local/logs/setup.log 2>&1'"
+# TBCMD = "sudo mkdir -p /local/setup && sudo chown `geni-get user_urn | cut -f4 -d+` /local/setup && sudo -u `geni-get user_urn | cut -f4 -d+` -Hi /bin/bash -c '/local/repository/setup-driver.sh >/local/logs/setup.log 2>&1'"
+TBCMD = "sudo chown `geni-get user_urn | cut -f4 -d+` /local/setup && sudo -u `geni-get user_urn | cut -f4 -d+` -Hi /bin/bash -c '/local/repository/setup-driver.sh >/local/logs/setup.log 2>&1'"
 
 #
 # For now, disable the testbed's root ssh key service until we can remove ours.
@@ -373,11 +374,12 @@ for i in range(0,params.nodeCount):
         iface = node.addInterface("if%d" % (j,))
         datalan.addInterface(iface)
         j += 1
-    if params.application == 0:
-        node.addService(RSpec.Execute(shell="sh",command="sudo echo \"K8S\" > /local/setup/app-type"))
-    else:
-        node.addService(RSpec.Execute(shell="sh",command="sudo echo \"DOCKER\" > /local/setup/app-type"))
     if TBCMD is not None:
+        node.addService(RSpec.Execute(shell="sh",command="sudo mkdir -p /local/setup"))
+        if params.application == 0:
+            node.addService(RSpec.Execute(shell="sh",command="sudo echo \"K8S\" > /local/setup/app-type"))
+        else:
+            node.addService(RSpec.Execute(shell="sh",command="sudo echo \"DOCKER\" > /local/setup/app-type"))
         node.addService(RSpec.Execute(shell="sh",command=TBCMD))
     if disableTestbedRootKeys:
         node.installRootKeys(False, False)

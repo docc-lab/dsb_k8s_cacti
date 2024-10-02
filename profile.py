@@ -376,10 +376,13 @@ for i in range(0,params.nodeCount):
         j += 1
     if TBCMD is not None:
         node.addService(RSpec.Execute(shell="sh",command="sudo mkdir -p /local/setup"))
-        if params.application == 0:
-            node.addService(RSpec.Execute(shell="sh",command="sudo echo \"K8S\" > /local/setup/app-type"))
+        node.addService(RSpec.Execute(shell="sh",command="sudo mkdir -p /local/setup/app-type"))
+        if int(params.application) == 0:
+            # node.addService(RSpec.Execute(shell="sh",command="sudo echo \"K8S\" > /local/setup/app-type"))
+            node.addService(RSpec.Execute(shell="sh",command="sudo touch /local/setup/app-type/k8s"))
         else:
-            node.addService(RSpec.Execute(shell="sh",command="sudo echo \"DOCKER\" > /local/setup/app-type"))
+            # node.addService(RSpec.Execute(shell="sh",command="sudo echo \"DOCKER\" > /local/setup/app-type"))
+            node.addService(RSpec.Execute(shell="sh",command="sudo touch /local/setup/app-type/docker"))
         node.addService(RSpec.Execute(shell="sh",command=TBCMD))
     if disableTestbedRootKeys:
         node.installRootKeys(False, False)

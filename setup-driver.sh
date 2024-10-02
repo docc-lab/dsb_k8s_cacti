@@ -31,7 +31,14 @@ for script in $ALLNODESCRIPTS ; do
     fi
 done
 if [ "$HOSTNAME" = "node-0" ]; then
-  for script in $HEADNODESCRIPTS_$(cat /local/setup/app-type)
+  HEADNODESCRIPTS=""
+  if [ -f /local/setup/app-type/k8s ]; then
+    HEADNODESCRIPTS=HEADNODESCRIPTS_K8S
+  fi
+  if [ -f /local/setup/app-type/docker ]; then
+    HEADNODESCRIPTS=HEADNODESCRIPTS_DOCKER
+  fi
+  for script in $HEADNODESCRIPTS
   do
 	  cd $SRC
 	  $SRC/$script | tee - /local/logs/${script}.log 2>&1

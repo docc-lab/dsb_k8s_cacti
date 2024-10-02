@@ -33,10 +33,10 @@ done
 if [ "$HOSTNAME" = "node-0" ]; then
   HEADNODESCRIPTS=""
   if [ -f /local/setup/app-type/k8s ]; then
-    HEADNODESCRIPTS=HEADNODESCRIPTS_K8S
+    HEADNODESCRIPTS=$HEADNODESCRIPTS_K8S
   fi
   if [ -f /local/setup/app-type/docker ]; then
-    HEADNODESCRIPTS=HEADNODESCRIPTS_DOCKER
+    HEADNODESCRIPTS=$HEADNODESCRIPTS_DOCKER
   fi
   for script in $HEADNODESCRIPTS
   do

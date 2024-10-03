@@ -26,6 +26,12 @@ cd /local/DeathStarBench/wrk2
 git submodule update --init --recursive ./deps/luajit/
 sudo apt-get update
 sudo apt-get install -y libssl-dev
+sudo apt-get install -y libz-dev
+sudo apt-get install -y luarocks
+sudo luarocks install luasocket
+sudo -H pip install asyncio
+sudo -H pip install aiohttp
+
 make all
 
 # Pull hotelreservation docker images
